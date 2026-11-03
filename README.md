@@ -11,7 +11,8 @@ A frontend prototype that lets users check whether a meeting room is available f
 - **AC3** — If the room is blocked, it is always unavailable.
 - **AC4** — The request must not overlap any existing booking; touching at an endpoint is fine.
 - **AC5** — A clear Available/Unavailable result is shown; bookings are never modified.
-- **AC6** — Every rule is unit-tested in `availability.test.ts`.
+- **AC6** — Clear Available/Unavailable feedback with a reason, usable on desktop and mobile
+  (checked manually at 402px width; not covered by unit tests).
 
 ### Room filters (F1–F5)
 
