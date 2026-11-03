@@ -8,6 +8,8 @@ interface ResultBannerProps {
 export function ResultBanner({ result }: ResultBannerProps) {
   return (
     <div
+      role="status"
+      aria-live="polite"
       className={`sticky top-0 z-10 mb-5 rounded-2xl border-2 p-4 shadow-sm transition-all ${
         result.available
           ? 'bg-emerald-50 border-emerald-200'

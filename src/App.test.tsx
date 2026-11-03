@@ -1,17 +1,12 @@
 // @vitest-environment jsdom
-import { afterEach } from 'vitest';
-import { cleanup } from '@testing-library/react';
-afterEach(() => cleanup());
-import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { afterEach, describe, it, expect } from 'vitest';
+import { render, screen, fireEvent, cleanup, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import App from './App';
 
-describe('App UI', () => {
-  beforeEach(() => {
-    cleanup();
-  });
+afterEach(() => cleanup());
 
+describe('App UI', () => {
   it('UI1 F5: R214 unavailable at 600-630, R101 available', () => {
     render(<App />);
 
@@ -24,14 +19,16 @@ describe('App UI', () => {
     fireEvent.change(endInput, { target: { value: '630' } });
 
     // R214 is selected by default — should show Unavailable (overlaps booking 600-660)
-    expect(screen.getByText('Unavailable')).toBeInTheDocument();
+    const banner1 = screen.getByRole('status');
+    expect(within(banner1).getByText('Unavailable')).toBeInTheDocument();
 
     // Select R101
     const r101Button = screen.getByText('R101').closest('button')!;
     fireEvent.click(r101Button);
 
     // R101's booking is 720-780, so 600-630 should be Available
-    expect(screen.getByText('Available')).toBeInTheDocument();
+    const banner2 = screen.getByRole('status');
+    expect(within(banner2).getByText('Available')).toBeInTheDocument();
   });
 
   it('UI2 F4: attendees 100 shows empty state', () => {
@@ -50,10 +47,10 @@ describe('App UI', () => {
     const r110Button = screen.getByText('R110').closest('button')!;
     fireEvent.click(r110Button);
 
-    // "Blocked" badge is shown
-    expect(screen.getByText('Blocked')).toBeInTheDocument();
-
-    // "Available" should not be shown
-    expect(screen.queryByText('Available')).not.toBeInTheDocument();
+    // The banner says Unavailable and mentions "blocked"
+    const banner = screen.getByRole('status');
+    expect(within(banner).getByText('Unavailable')).toBeInTheDocument();
+    expect(within(banner).getByText(/blocked/i)).toBeInTheDocument();
+    expect(within(banner).queryByText('Available')).not.toBeInTheDocument();
   });
 });
