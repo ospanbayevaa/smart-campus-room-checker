@@ -98,3 +98,16 @@ export interface DayRange {
 }
 
 export const FULL_DAY: DayRange = { start: 0, end: 1440 };
+
+/**
+ * Thin wrapper around checkAvailability that pulls blocked and bookings
+ * from a Room object so callers don't assemble them by hand.
+ */
+export function checkRoomAvailability(
+  room: { blocked: boolean; bookings: Booking[] },
+  start: number,
+  end: number,
+  now: number,
+): AvailabilityResult {
+  return checkAvailability(start, end, now, room.blocked, room.bookings);
+}
