@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Building2 } from 'lucide-react';
-import { checkRoomAvailability } from '@/lib/availability';
+import { checkRoomAvailability, isValidTimeRange } from '@/lib/availability';
 import { filterRooms } from '@/lib/filters';
 import { ROOMS, type Room } from '@/data/rooms';
 import { RoomFilters } from '@/components/RoomFilters';
@@ -11,8 +11,6 @@ import { BookingList } from '@/components/BookingList';
 import { Timeline } from '@/components/Timeline';
 
 const EQUIPMENT_OPTIONS = ['projector', 'whiteboard', 'microphone', 'video'];
-
-const VALID_RANGE = (n: number) => Number.isInteger(n) && n >= 0 && n <= 1440;
 
 export default function App() {
   const [start, setStart] = useState(660);
@@ -40,7 +38,7 @@ export default function App() {
     return checkRoomAvailability(selectedRoom, start, end, now);
   }, [selectedRoom, start, end, now]);
 
-  const hasValidRequest = VALID_RANGE(start) && VALID_RANGE(end) && start < end;
+  const hasValidRequest = isValidTimeRange(start, end);
 
   const handleToggleEquipment = (item: string) => {
     setSelectedEquipment((prev) =>

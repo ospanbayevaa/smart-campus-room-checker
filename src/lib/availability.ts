@@ -16,6 +16,20 @@ export type AvailabilityResult = {
 };
 
 /**
+ * AC1 shape check: integers, 0 <= start < end <= 1440.
+ * Shared by checkAvailability() and the UI so there is one source of truth.
+ */
+export function isValidTimeRange(start: number, end: number): boolean {
+  return (
+    Number.isInteger(start) &&
+    Number.isInteger(end) &&
+    start >= 0 &&
+    end <= 1440 &&
+    start < end
+  );
+}
+
+/**
  * Returns all booking ranges that overlap the requested [start, end) interval.
  * Touching at an endpoint is NOT overlap: [300, 360) and [360, 420) are fine.
  */
@@ -46,14 +60,18 @@ export function checkAvailability(
   }
 
   // AC1: integers, 0 <= start < end <= 1440, start strictly after now.
-  if (!Number.isInteger(start) || !Number.isInteger(end)) {
-    violations.push('Start and end must be whole numbers (integers).');
-  }
-  if (start < 0 || end > 1440) {
-    violations.push('Time must be within 0–1440 minutes (00:00 to 24:00).');
-  }
-  if (start >= end) {
-    violations.push('Start must be before end.');
+  // isValidTimeRange is the shared shape check; when it fails we still produce
+  // the granular violation messages the UI and tests rely on.
+  if (!isValidTimeRange(start, end)) {
+    if (!Number.isInteger(start) || !Number.isInteger(end)) {
+      violations.push('Start and end must be whole numbers (integers).');
+    }
+    if (start < 0 || end > 1440) {
+      violations.push('Time must be within 0–1440 minutes (00:00 to 24:00).');
+    }
+    if (start >= end) {
+      violations.push('Start must be before end.');
+    }
   }
   if (start <= now) {
     violations.push(`Start must be strictly after "now" (${minutesToHHMM(now)}).`);
