@@ -1,7 +1,10 @@
 // @vitest-environment jsdom
+import { afterEach } from 'vitest';
+import { cleanup } from '@testing-library/react';
+afterEach(() => cleanup());
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 import App from './App';
 
 describe('App UI', () => {
