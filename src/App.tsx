@@ -9,13 +9,12 @@ import {
   Unlock,
   Info,
 } from 'lucide-react';
+import { checkAvailability, minutesToHHMM } from '@/lib/availability';
 import {
   BOOKING_SETS,
   BOOKING_SET_LABELS,
-  checkAvailability,
-  minutesToHHMM,
   type BookingSet,
-} from '@/lib/availability';
+} from '@/data/rooms';
 import { NumberField } from '@/components/NumberField';
 import { Timeline } from '@/components/Timeline';
 

@@ -9,21 +9,6 @@ export interface Booking {
   end: number;
 }
 
-export type BookingSet = 'base' | 'multiple';
-
-export const BOOKING_SETS: Record<BookingSet, Booking[]> = {
-  base: [{ start: 600, end: 660 }],
-  multiple: [
-    { start: 600, end: 660 },
-    { start: 780, end: 840 },
-  ],
-};
-
-export const BOOKING_SET_LABELS: Record<BookingSet, string> = {
-  base: 'Base: 600-660',
-  multiple: 'Multiple: 600-660, 780-840',
-};
-
 export type AvailabilityResult = {
   available: boolean;
   reason: string;
@@ -34,7 +19,7 @@ export type AvailabilityResult = {
  * Returns all booking ranges that overlap the requested [start, end) interval.
  * Touching at an endpoint is NOT overlap: [300, 360) and [360, 420) are fine.
  */
-function findOverlaps(start: number, end: number, bookings: Booking[]): Booking[] {
+export function findOverlaps(start: number, end: number, bookings: Booking[]): Booking[] {
   return bookings.filter((b) => start < b.end && b.start < end);
 }
 

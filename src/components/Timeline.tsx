@@ -1,11 +1,11 @@
-import { minutesToHHMM } from '@/lib/availability';
+import { minutesToHHMM, type Booking } from '@/lib/availability';
 
 interface TimelineProps {
   start: number;
   end: number;
   now: number;
   blocked: boolean;
-  bookings: { start: number; end: number }[];
+  bookings: Booking[];
   available: boolean;
   hasValidRequest: boolean;
 }
