@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Building2 } from 'lucide-react';
 import { checkRoomAvailability, isValidTimeRange } from '@/lib/availability';
-import { filterRooms } from '@/lib/filters';
+import { filterRooms, getEquipmentOptions } from '@/lib/filters';
 import { ROOMS, type Room } from '@/data/rooms';
 import { RoomFilters } from '@/components/RoomFilters';
 import { RoomList } from '@/components/RoomList';
@@ -10,7 +10,7 @@ import { RequestForm } from '@/components/RequestForm';
 import { BookingList } from '@/components/BookingList';
 import { Timeline } from '@/components/Timeline';
 
-const EQUIPMENT_OPTIONS = ['projector', 'whiteboard', 'microphone', 'video'];
+const EQUIPMENT_OPTIONS = getEquipmentOptions(ROOMS);
 
 export default function App() {
   const [start, setStart] = useState(660);
