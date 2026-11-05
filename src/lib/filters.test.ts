@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { filterRooms } from './filters';
+import { filterRooms, getEquipmentOptions } from './filters';
 import { checkRoomAvailability } from './availability';
 import { ROOMS, type Room } from '@/data/rooms';
 
@@ -65,5 +65,31 @@ describe('filterRooms and checkRoomAvailability', () => {
     checkRoomAvailability(ROOMS[0], 660, 720, 540);
     const after = JSON.stringify(ROOMS);
     expect(after).toBe(before);
+  });
+});
+
+describe('getEquipmentOptions', () => {
+  it('E01: returns unique equipment from ROOMS in first-seen order', () => {
+    expect(getEquipmentOptions(ROOMS)).toEqual(['projector', 'whiteboard', 'microphone', 'video']);
+  });
+
+  it('E02: removes duplicate equipment across rooms', () => {
+    const rooms: Room[] = [
+      { id: 'A', name: 'A', capacity: 1, equipment: ['projector', 'whiteboard'], blocked: false, bookings: [] },
+      { id: 'B', name: 'B', capacity: 1, equipment: ['projector', 'microphone'], blocked: false, bookings: [] },
+      { id: 'C', name: 'C', capacity: 1, equipment: ['whiteboard', 'microphone'], blocked: false, bookings: [] },
+    ];
+    expect(getEquipmentOptions(rooms)).toEqual(['projector', 'whiteboard', 'microphone']);
+  });
+
+  it('E03: returns an empty array for an empty room list', () => {
+    expect(getEquipmentOptions([])).toEqual([]);
+  });
+
+  it('E04: does not mutate the rooms array or its equipment entries', () => {
+    const rooms = freshRooms();
+    const before = JSON.stringify(rooms);
+    getEquipmentOptions(rooms);
+    expect(JSON.stringify(rooms)).toBe(before);
   });
 });
