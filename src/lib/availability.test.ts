@@ -92,6 +92,30 @@ describe('checkAvailability — AC1–AC6', () => {
     expect(result.reason.length).toBeGreaterThan(0);
   });
 
+  it('T20 AC1: now = NaN is rejected — false', () => {
+    const f = makeFixture({ now: NaN });
+    const result = checkAvailability(660, 720, f.now, f.blocked, f.bookings);
+    expect(result.available).toBe(false);
+    expect(result.violations.length).toBeGreaterThan(0);
+    expect(result.reason.length).toBeGreaterThan(0);
+  });
+
+  it('T21 AC1: now = -10 is rejected — false', () => {
+    const f = makeFixture({ now: -10 });
+    const result = checkAvailability(540, 600, f.now, f.blocked, f.bookings);
+    expect(result.available).toBe(false);
+    expect(result.violations.length).toBeGreaterThan(0);
+    expect(result.reason.length).toBeGreaterThan(0);
+  });
+
+  it('T22 AC1: now = 1441 is rejected — false', () => {
+    const f = makeFixture({ now: 1441 });
+    const result = checkAvailability(660, 720, f.now, f.blocked, f.bookings);
+    expect(result.available).toBe(false);
+    expect(result.violations.length).toBeGreaterThan(0);
+    expect(result.reason.length).toBeGreaterThan(0);
+  });
+
   // ──────────────────────────────────────────────
   //  AC2: duration <= 120 minutes (exactly 120 allowed)
   // ──────────────────────────────────────────────

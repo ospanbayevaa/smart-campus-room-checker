@@ -73,6 +73,10 @@ export function checkAvailability(
       violations.push('Start must be before end.');
     }
   }
+  // AC1: "now" must be an integer within 0..1440 (NaN or out-of-range is invalid).
+  if (!Number.isInteger(now) || now < 0 || now > 1440) {
+    violations.push('Current time must be a whole number from 0 to 1440.');
+  }
   if (start <= now) {
     violations.push(`Start must be strictly after "now" (${minutesToHHMM(now)}).`);
   }
