@@ -66,6 +66,18 @@ describe('filterRooms and checkRoomAvailability', () => {
     const after = JSON.stringify(ROOMS);
     expect(after).toBe(before);
   });
+
+  it('F09 F1: attendees NaN -> all 4 rooms returned (empty field is no constraint)', () => {
+    const rooms = freshRooms();
+    const result = filterRooms(rooms, NaN, []);
+    expect(result.map((r) => r.id)).toEqual(['R214', 'R101', 'R305', 'R110']);
+  });
+
+  it('F10 F2: attendees NaN with [projector, whiteboard] -> only R214', () => {
+    const rooms = freshRooms();
+    const result = filterRooms(rooms, NaN, ['projector', 'whiteboard']);
+    expect(result.map((r) => r.id)).toEqual(['R214']);
+  });
 });
 
 describe('getEquipmentOptions', () => {

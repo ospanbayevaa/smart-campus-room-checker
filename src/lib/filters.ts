@@ -29,9 +29,12 @@ export function filterRooms(
   attendees: number,
   requiredEquipment: string[],
 ): Room[] {
+  // Treat an empty/invalid attendees field as "no constraint" (minimum 1),
+  // so an empty field doesn't hide every room.
+  const effectiveAttendees = Number.isFinite(attendees) && attendees >= 1 ? attendees : 1;
   return rooms.filter(
     (room) =>
-      room.capacity >= attendees &&
+      room.capacity >= effectiveAttendees &&
       requiredEquipment.every((item) => room.equipment.includes(item)),
   );
 }
