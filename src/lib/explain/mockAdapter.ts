@@ -19,7 +19,6 @@ function fallback(): ExplainOutput {
 function buildExplanation(input: ExplainInput): ExplainOutput {
   const from = minutesToHHMM(input.start);
   const to = minutesToHHMM(input.end);
-  const status = input.isAvailable ? 'available' : 'unavailable';
   let explanation: string;
   switch (input.reasonCode) {
     case 'AVAILABLE':

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Sparkles, Loader2 } from 'lucide-react';
 import {
   explainAvailability,
@@ -24,11 +24,22 @@ export function ExplanationPanel({ input }: ExplanationPanelProps) {
   const [mode, setMode] = useState<SimulateMode>('ok');
   const [explanation, setExplanation] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const requestSeq = useRef(0);
+
+  // When inputs change, drop the shown explanation and invalidate any
+  // in-flight request so it can never write its old text afterwards.
+  useEffect(() => {
+    requestSeq.current++;
+    setExplanation(null);
+    setPending(false);
+  }, [input.roomLabel, input.start, input.end, input.isAvailable, input.reasonCode]);
 
   const handleExplain = async () => {
+    const seq = ++requestSeq.current;
     setPending(true);
     setExplanation(null);
     const output = await explainAvailability(input, mode);
+    if (seq !== requestSeq.current) return; // superseded by a newer request
     setExplanation(output.explanation);
     setPending(false);
   };
