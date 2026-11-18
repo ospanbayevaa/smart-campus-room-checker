@@ -1,11 +1,13 @@
 import { useMemo, useState } from 'react';
 import { Building2 } from 'lucide-react';
 import { checkRoomAvailability, isValidTimeRange } from '@/lib/availability';
+import { getReasonCode } from '@/lib/explain/reasonCode';
 import { filterRooms, getEquipmentOptions } from '@/lib/filters';
 import { ROOMS, type Room } from '@/data/rooms';
 import { RoomFilters } from '@/components/RoomFilters';
 import { RoomList } from '@/components/RoomList';
 import { ResultBanner } from '@/components/ResultBanner';
+import { ExplanationPanel } from '@/components/ExplanationPanel';
 import { RequestForm } from '@/components/RequestForm';
 import { BookingList } from '@/components/BookingList';
 import { Timeline } from '@/components/Timeline';
@@ -66,6 +68,19 @@ export default function App() {
 
         {/* Result banner */}
         {result && <ResultBanner result={result} />}
+
+        {/* Explanation (mock) — decorative only, never changes the banner */}
+        {result && selectedRoom && (
+          <ExplanationPanel
+            input={{
+              roomLabel: `${selectedRoom.id} — ${selectedRoom.name}`,
+              start,
+              end,
+              isAvailable: result.available,
+              reasonCode: getReasonCode(result),
+            }}
+          />
+        )}
 
         {/* Filters */}
         <RoomFilters
